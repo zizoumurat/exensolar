@@ -1,0 +1,69 @@
+@{
+    Layout = "~/views/layout.cshtml";
+}
+<!-- main content -->
+<!-- preloader -->
+<div class="preloader">
+    <div>
+        <div class="multi-spinner-container">
+            <div class="multi-spinner">
+                <div class="multi-spinner">
+                    <div class="multi-spinner">
+                        <div class="multi-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- preloader end -->
+@Html.Partial("~/views/partials/header.cshtml")
+
+<!-- Projects Page -->
+<section class="projects-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title">
+                    <h2>Hizmetlerimiz</h2>
+                    <p>Temiz enerji çözümlerimizi keşfedin</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <img src="assets/img/solar-panel.jpg" alt="Solar Panel">
+                    <div class="project-content">
+                        <h3>Solar Enerji</h3>
+                        <p>Güneş enerjisi sistemleri ile enerji üretiminde uzmanlaşmış bir ekip.</p>
+                        <a href="#" class="btn btn-primary">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <img src="assets/img/wind-turbine.jpg" alt="Wind Turbine">
+                    <div class="project-content">
+                        <h3>Rüzgar Enerjisi</h3>
+                        <p>Yenilenebilir enerji üretiminde rüzgar enerjisi çözümleri sunuyoruz.</p>
+                        <a href="#" class="btn btn-primary">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <img src="assets/img/energy-storage.jpg" alt="Energy Storage">
+                    <div class="project-content">
+                        <h3>Depolama Sistemleri</h3>
+                        <p>Enerji depolama çözümleri ile enerji verimliliğini artırıyoruz.</p>
+                        <a href="#" class="btn btn-primary">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@Html.Partial("~/views/partials/footer.cshtml")

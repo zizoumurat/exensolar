@@ -1,0 +1,69 @@
+@{
+    Layout = "~/views/layout.cshtml";
+}
+<!-- main content -->
+<!-- preloader -->
+<div class="preloader">
+    <div>
+        <div class="multi-spinner-container">
+            <div class="multi-spinner">
+                <div class="multi-spinner">
+                    <div class="multi-spinner">
+                        <div class="multi-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- preloader end -->
+@Html.Partial("~/views/partials/header.cshtml")
+
+<!-- References Page -->
+<section class="references-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title">
+                    <h2>Referanslar</h2>
+                    <p>Projelerimizle ilgili referanslarımızı inceleyin</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="reference-card">
+                    <img src="assets/img/reference1.jpg" alt="Reference">
+                    <div class="reference-content">
+                        <h3>Referans Projesi 1</h3>
+                        <p>Proje açıklaması buraya gelir. Bu referans projesi için detaylı bilgi verilmiştir.</p>
+                        <p class="date">2024</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="reference-card">
+                    <img src="assets/img/reference2.jpg" alt="Reference">
+                    <div class="reference-content">
+                        <h3>Referans Projesi 2</h3>
+                        <p>Proje açıklaması buraya gelir. Bu referans projesi için detaylı bilgi verilmiştir.</p>
+                        <p class="date">2023</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="reference-card">
+                    <img src="assets/img/reference3.jpg" alt="Reference">
+                    <div class="reference-content">
+                        <h3>Referans Projesi 3</h3>
+                        <p>Proje açıklaması buraya gelir. Bu referans projesi için detaylı bilgi verilmiştir.</p>
+                        <p class="date">2022</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@Html.Partial("~/views/partials/footer.cshtml")

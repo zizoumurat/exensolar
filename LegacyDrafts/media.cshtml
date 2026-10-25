@@ -1,0 +1,82 @@
+@{
+    Layout = "~/views/layout.cshtml";
+}
+<!-- main content -->
+<!-- preloader -->
+<div class="preloader">
+    <div>
+        <div class="multi-spinner-container">
+            <div class="multi-spinner">
+                <div class="multi-spinner">
+                    <div class="multi-spinner">
+                        <div class="multi-spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- preloader end -->
+@Html.Partial("~/views/partials/header.cshtml")
+
+<!-- Media Page -->
+<section class="media-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title">
+                    <h2>Medya</h2>
+                    <p>Haberler ve duyurularımız</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog-post">
+                    <img src="assets/img/blog1.jpg" alt="Blog Post">
+                    <div class="blog-content">
+                        <h3>Yenilikçi Enerji Teknolojileri</h3>
+                        <p class="meta">2024-05-15 | Yeni</p>
+                        <p>Bu yazıda enerji sektöründe yeni teknolojiler ve gelişmeler hakkında bilgiler paylaşılıyor. Yenilikçi çözümlerle çevre dostu projeler geliştiriliyor.</p>
+                        <a href="#" class="btn btn-primary">Devamını Oku</a>
+                    </div>
+                </div>
+                <div class="blog-post">
+                    <img src="assets/img/blog2.jpg" alt="Blog Post">
+                    <div class="blog-content">
+                        <h3>Sürdürülebilir Enerji Projeleri</h3>
+                        <p class="meta">2024-04-22 | Haber</p>
+                        <p>Yakın zamanda tamamlanan projelerimizle ilgili detaylı rapor ve başarılar hakkında bilgi veriliyor. Sürdürülebilir enerji projelerine odaklanıyoruz.</p>
+                        <a href="#" class="btn btn-primary">Devamını Oku</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="widget">
+                        <h4>Kategoriler</h4>
+                        <ul class="category-list">
+                            <li><a href="#">Haberler</a></li>
+                            <li><a href="#">Duyurular</a></li>
+                            <li><a href="#">Yenilikler</a></li>
+                            <li><a href="#">Etkinlikler</a></li>
+                        </ul>
+                    </div>
+                    <div class="widget">
+                        <h4>Etiketler</h4>
+                        <div class="tag-cloud">
+                            <a href="#">Enerji</a>
+                            <a href="#">Sürdürülebilirlik</a>
+                            <a href="#">Güneş</a>
+                            <a href="#">Rüzgar</a>
+                            <a href="#">Depolama</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@Html.Partial("~/views/partials/footer.cshtml")

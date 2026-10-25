@@ -1,0 +1,122 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using System.Text.Json
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject Umbraco.Cms.Core.Services.IContentService ContentService
+@inject Umbraco.Cms.Core.IPublishedContentQuery PublishedQuery
+@{
+    Layout = "Master.cshtml";
+    var title = Model.Value<string>("pageTitle") ?? Model.Name;
+    var intro = Model.Value<string>("intro") ?? "";
+    var body = Model.Value<string>("bodyText") ?? "";
+    var image = Model.Value<string>("imageUrl");
+    var primaryMedia = Model.Value<IPublishedContent>("primaryImage")?.Url();
+    var secondaryMedia = Model.Value<IPublishedContent>("secondaryImage")?.Url();
+    var items = ContentService.GetPagedChildren(Model.Id, 0, 100, out _)
+        .Select(x => PublishedQuery.Content(x.Id)).Where(x => x?.ContentType.Alias == "exenItem").Cast<IPublishedContent>().ToList();
+    var homeSlides = new List<(string Title, string Description, string Image, string Link, string LinkText, bool ShowQuote)>();
+    var homePartners = new List<(string Title, string Image)>();
+    var homeData = Model.Value<string>("homeSections");
+    if (!string.IsNullOrWhiteSpace(homeData))
+    {
+        try
+        {
+            using var json = JsonDocument.Parse(homeData);
+            if (json.RootElement.TryGetProperty("slides", out var slideArray) && slideArray.ValueKind == JsonValueKind.Array)
+                foreach (var item in slideArray.EnumerateArray())
+                {
+                    string Read(JsonElement source, string key) => source.TryGetProperty(key, out var prop) ? prop.GetString() ?? "" : "";
+                    var imageValue = Read(item, "image");
+                    var imageUrl = Guid.TryParse(imageValue, out var mediaKey) ? PublishedQuery.Content(mediaKey)?.Url() ?? "" : imageValue;
+                    homeSlides.Add((Read(item, "title"), Read(item, "description"), imageUrl, Read(item, "link"), Read(item, "linkText"), item.TryGetProperty("showQuote", out var show) && show.GetBoolean()));
+                }
+            if (json.RootElement.TryGetProperty("partners", out var partnerArray) && partnerArray.ValueKind == JsonValueKind.Array)
+                foreach (var item in partnerArray.EnumerateArray())
+                {
+                    string Read(JsonElement source, string key) => source.TryGetProperty(key, out var prop) ? prop.GetString() ?? "" : "";
+                    var imageValue = Read(item, "image");
+                    var imageUrl = Guid.TryParse(imageValue, out var mediaKey) ? PublishedQuery.Content(mediaKey)?.Url() ?? "" : imageValue;
+                    homePartners.Add((Read(item, "title"), imageUrl));
+                }
+        }
+        catch (JsonException) { }
+    }
+}
+
+@if (Model.Level == 1)
+{
+    var slides = new List<(string Title, string Description, string Image, string Link, string LinkText, bool ShowQuote)>(homeSlides);
+    if (slides.Count == 0) slides.AddRange(items.Where(x => x.Value<string>("itemType") == "slider").Select(x => (Title: x.Value<string>("itemTitle") ?? x.Name, Description: x.Value<string>("itemText") ?? "", Image: x.Value<string>("itemImage") ?? "", Link: x.Value<string>("itemLink") ?? "", LinkText: x.Value<string>("itemLinkText") ?? "Teklif Al", ShowQuote: true)));
+    var partners = new List<(string Title, string Image)>(homePartners);
+    if (partners.Count == 0) partners.AddRange(items.Where(x => x.Value<string>("itemType") == "partner").Select(x => (Title: x.Value<string>("itemTitle") ?? x.Name, Image: x.Value<string>("itemImage") ?? "")));
+    <section class="slider-hero">
+        <div class="slider-home-1 owl-carousel owl-theme">
+            @foreach (var slide in slides)
+            {
+                var slideImage = string.IsNullOrWhiteSpace(slide.Image) ? "/assets/img/featured-area.jpg" : slide.Image;
+                var slideLinkText = string.IsNullOrWhiteSpace(slide.LinkText) ? "Teklif Al" : slide.LinkText;
+                <div class="item hero-section" style="background-image:url('@slideImage')">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="featured-area-one">
+                                    <h2>@slide.Title</h2>
+                                    <h6>@slide.Description</h6>
+                                    @if (slide.ShowQuote) { <a href="javascript:void(0)" class="newsbox button">@slideLinkText</a> }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+    <section class="gap no-top home-introduction">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="heading">
+                        <p>@(Model.Value<string>("eyebrow") ?? "Exen Solar")</p>
+                        <div class="line"></div>
+                        <h2>@title</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="renewable-group">
+                        @if (!string.IsNullOrWhiteSpace(body))
+                        {
+                            <p>@body</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="recent-projects gap no-bottom"><div class="container"><div class="heading"><p>Exen Solar</p><div class="line"></div><h2>Hizmetlerimiz</h2></div>
+        @{ var servicePageId = ContentService.GetRootContent().FirstOrDefault(x => x.Name == "Hizmetlerimiz")?.Id;
+           var services = servicePageId.HasValue ? ContentService.GetPagedChildren(servicePageId.Value, 0, 100, out _).Select(x => PublishedQuery.Content(x.Id)).Where(x => x is not null).Cast<IPublishedContent>() : Enumerable.Empty<IPublishedContent>(); }
+        <div class="new-project owl-carousel owl-theme">@foreach (var service in services)
+        { <div class="item"><div class="recent-projects-img"><figure><img src="@(service.Value<string>("itemImage") ?? "/assets/img/recent-projects-1.jpg")" alt="@service.Name"></figure><div class="recent-projects-text"><a href="/hizmetlerimiz/"><h5>@service.Value("itemTitle")</h5></a><a href="/hizmetlerimiz/" aria-label="Hizmeti incele"><i><svg width="14" height="12" viewBox="0 0 14 12" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.37998 0.369629L13.9606 6.16918L8.37998 11.9687V6.86986H0.897949V5.39253H8.37998V0.369629Z" /></svg></i></a></div></div></div> }</div>
+    </div>
+    <div style="height:250px"></div>
+    <div class="container"><div class="request-quote two" style="background-image:url('/assets/img/background.jpg')"><div class="row">
+        <div class="col-lg-7"><div class="heading"><h2>Güvenilir Enerji <br> Altyapılarının Mimarı</h2><h6>Enerji nakil hatlarından trafo merkezlerine kadar tüm süreçleri kusursuz şekilde yönetiyoruz.</h6></div><div class="d-md-flex align-items-center mt-md-5"><a href="javascript:void(0)" class="newsbox button">Teklif Al</a></div></div>
+        <div class="col-lg-5"><div class="arista-square-img"><img alt="Enerji altyapıları" src="/assets/img/arista-square-1.png"></div></div>
+    </div></div></div>
+    <div style="height:100px"></div>
+    </section>
+    <div class="container partners gap no-top"><h3>Çözüm Ortaklarımız</h3><div class="sponsors">
+        @foreach (var partner in partners)
+        { <img alt="@partner.Title" src="@(string.IsNullOrWhiteSpace(partner.Image) ? "/assets/img/sponsor-1.jpg" : partner.Image)"> }
+    </div></div>
+}
+else
+{
+    <section class="banner" style="background-image:url('/assets/img/banner.jpg')"><div class="container"><div class="banner-text"><h2>@title</h2><p>Exen Solar @title</p><ul class="page-breadcrumb"><li><a href="@Model.Root().Url()"><i class="fa-solid fa-house pe-2"></i>Anasayfa</a></li><li>@title</li></ul></div></div></section>
+    <section class="gap"><div class="container"><div class="row"><div class="col-xl-5"><div class="heading"><p>Exen Solar</p><div class="line"></div><h2>@title</h2></div>
+        @if (!string.IsNullOrWhiteSpace(intro)) { <p class="lead">@intro</p> }
+        @if (!string.IsNullOrWhiteSpace(body)) { <div>@Html.Raw(body)</div> }
+        </div><div class="col-xl-7">@if (Model.Name == "Hakkımızda") { <div class="about-img"><img alt="Hakkımızda" src="@(primaryMedia ?? (string.IsNullOrWhiteSpace(image) ? "/assets/img/about-1.jpg" : image))"><img alt="Hakkımızda" class="img-about" src="@(secondaryMedia ?? "/assets/img/about-2.jpg")"></div> } else if (!string.IsNullOrWhiteSpace(image)) { <img class="img-fluid" src="@image" alt="@title"> }</div></div>
+        @if (Model.Name == "İletişim") { <partial name="ContactDetails" /> }
+        <div class="row mt-4">@foreach (var item in items) { <div class="col-lg-4 col-md-6 mb-4"><div class="recent-projects-img"><figure><img src="@(item.Value<string>("itemImage") ?? "/assets/img/recent-projects-1.jpg")" alt="@item.Name"></figure><div class="recent-projects-text"><h5>@item.Value("itemTitle")</h5><p>@item.Value("itemText")</p></div></div></div> }</div>
+    </div></section>
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Exen Solar Backoffice",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "ExenSolar.PropertyEditorUi.HomeSections",
+      "name": "Exen Solar Ana Sayfa Bölümleri",
+      "element": "/App_Plugins/ExenSolar/home-sections.element.js",
+      "meta": {
+        "label": "Ana Sayfa Bölümleri",
+        "propertyEditorSchemaAlias": "Umbraco.TextArea",
+        "icon": "icon-layout",
+        "group": "#propertyEditorUIGroups_common",
+        "supportsReadOnly": false
+      }
+    }
+  ]
+}

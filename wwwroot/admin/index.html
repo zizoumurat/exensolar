@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Exen Solar · Yönetim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css"><link rel="stylesheet" href="/admin/extra.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/admin/"><span class="brand-mark">e<span>x</span>en</span><small>SOLAR · YÖNETİM</small></a>
+      <div class="side-label">SİTE MENÜSÜ</div>
+      <nav id="navigation" aria-label="Sayfa menüsü"></nav>
+      <div class="side-bottom"><span class="status-dot"></span> İçerik yönetimi <span class="version">v1</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><span class="crumb">Exen Solar</span><span class="slash">/</span><strong id="crumbPage">Ana Sayfa</strong></div><div class="top-actions"><a href="/" target="_blank" class="site-link">Siteyi görüntüle <span>↗</span></a><button id="logoutButton" class="logout-button">Çıkış</button><div class="avatar">ES</div></div></header>
+      <div class="content-wrap">
+        <div class="page-heading"><div><div class="eyebrow">İÇERİK YÖNETİMİ</div><h1 id="pageTitle">Ana Sayfa</h1><p id="pageSubtitle">Ana sayfa metinlerini ve bölümlerini buradan düzenleyin.</p></div><div class="save-state" id="saveState"><span></span> Değişiklikler kaydedildi</div></div>
+        <div id="pageContent"></div>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-head"><div><div class="eyebrow">İÇERİK KAYDI</div><h2 id="modalTitle">Yeni kayıt</h2></div><button class="icon-button" id="closeModal" aria-label="Kapat">×</button></header>
+      <form id="recordForm"><div id="modalFields" class="modal-fields"></div><footer class="modal-foot"><button type="button" class="btn button-quiet" id="cancelModal">Vazgeç</button><button class="btn btn-primary" type="submit">Kaydet</button></footer></form>
+    </section>
+  </div>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

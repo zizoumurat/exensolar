@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Update="appsettings.Local.json" CopyToPublishDirectory="Never" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.6" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+    <Compile Remove="Composers/**/*.cs;Controllers/**/*.cs" />
+    <Content Remove="views/**/*.cshtml;LegacyDrafts/**/*.cshtml" />
+    <None Include="views/**/*.cshtml;LegacyDrafts/**/*.cshtml" />
+  </ItemGroup>
+</Project>

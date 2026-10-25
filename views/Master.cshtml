@@ -1,0 +1,37 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject Umbraco.Cms.Core.Services.IContentService ContentService
+@inject Umbraco.Cms.Core.IPublishedContentQuery PublishedQuery
+@{
+    Layout = null;
+    var home = Model.Root();
+    var settings = ContentService.GetPagedChildren(home.Id, 0, 50, out _).FirstOrDefault(x => x.ContentType.Alias == "exenSiteSettings");
+    var pages = ContentService.GetRootContent().Where(x => x.ContentType.Alias == "exenPage" && x.Id != home.Id).Select(x => PublishedQuery.Content(x.Id)).Where(x => x is not null).Cast<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>().ToList();
+    var email = settings is null ? "info@exensolar.tr" : (settings.GetValue<string>("email") ?? "info@exensolar.tr");
+    var phone = settings is null ? "+90 342 345 67 89" : (settings.GetValue<string>("phone") ?? "+90 342 345 67 89");
+    var logo = settings?.GetValue<string>("logoUrl") ?? "/assets/img/exen_logo.png";
+    var footerLogo = settings?.GetValue<string>("footerLogoUrl") ?? "/assets/img/exen_logo_2.png";
+    var mediaLogo = settings is null ? null : PublishedQuery.Content(settings.GetValue<Guid?>("logoMedia") ?? Guid.Empty)?.Url();
+    var mediaFooterLogo = settings is null ? null : PublishedQuery.Content(settings.GetValue<Guid?>("footerLogoMedia") ?? Guid.Empty)?.Url();
+    logo = mediaLogo ?? logo;
+    footerLogo = mediaFooterLogo ?? footerLogo;
+}
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@(Model.Value<string>("pageTitle") ?? Model.Name) - Exen Solar</title><link rel="icon" href="/assets/img/favicon.png">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css"><link rel="stylesheet" href="/assets/css/owl.carousel.min.css"><link rel="stylesheet" href="/assets/css/owl.theme.default.min.css"><link rel="stylesheet" href="/assets/css/slick.css"><link rel="stylesheet" href="/assets/css/fontawesome.min.css"><link rel="stylesheet" href="/assets/css/slick-theme.css"><link rel="stylesheet" href="/assets/css/jquery.fancybox.min.css"><link rel="stylesheet" href="/assets/css/style.css?v=20261024-4"><link rel="stylesheet" href="/assets/css/responsive.css"><link rel="stylesheet" href="/assets/css/color.css"></head><body>
+<header><div class="top-bar"><div class="container"><div class="top-bar-text"><ul class="d-flex"></ul><div class="d-flex top-bar-mail"><div class="d-flex align-items-center me-4"><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:@email"><p>@email</p></a></div></div></div></div></div>
+<div class="container"><div class="menu-bar"><div class="logo"><a href="@home.Url()"><img src="@logo" alt="Exen Solar" style="height:60px"></a></div><nav class="navbar"><ul class="navbar-links">
+@foreach (var navPage in new[] { home }.Concat(pages))
+{
+    <li class="navbar-dropdown"><a href="@navPage.Url()">@navPage.Name</a></li>
+}
+</ul></nav><div class="search-style d-flex align-items-center"><a class="header-button newsbox button" href="javascript:void(0)">TEKLİF İSTE</a></div><div class="bar-menu"><i class="fa-solid fa-bars"></i></div></div></div></header>
+@RenderBody()
+<footer class="gap no-bottom one" style="background-image:url('/assets/img/footer.jpg')"><div class="container"><div class="row align-items-center"><div class="col-lg-4 col-md-6"><div class="logo"><img src="@footerLogo" alt="Exen Solar" style="height:100px;width:auto"></div></div><div class="col-lg-4 col-md-6"></div><div class="col-lg-4 col-md-6"><div class="about-energix"><h5>Bültenimize Abone Olun.</h5><p>E-postaya abone olun ve son haberleri ve güncellemeleri alın</p><form class="footer-subscribe" onsubmit="return false;"><input type="email" name="newsletterEmail" placeholder="Mail Adresiniz Yazın..." autocomplete="email" aria-label="E-posta adresiniz"><button type="submit" class="button" aria-label="Abone ol"><i class="fa-solid fa-paper-plane"></i></button></form></div></div></div></div><div class="footer-bottom"><p>© @DateTime.Now.Year Exen Solar. Tüm hakları saklıdır.</p></div></footer>
+<div class="latterbox" role="dialog" aria-modal="true" aria-label="Teklif Al">
+    <form class="request-quote-form" onsubmit="return false;">
+        <h3>Teklif Al</h3><input type="text" name="fullName" placeholder="İsim Soyisim" autocomplete="name"><input type="email" name="email" placeholder="info@exensolar.tr" autocomplete="email"><textarea name="message" placeholder="Mesaj"></textarea><button type="submit" class="button">Gönder</button>
+    </form>
+    <div class="latterbox-cross-btn" role="button" tabindex="0" aria-label="Kapat"><i class="fa fa-times"></i></div>
+</div>
+<div id="progress"><span id="progress-value"><i class="fa-solid fa-arrow-up"></i></span></div>
+<script src="/assets/js/jquery-3.6.0.min.js"></script><script src="/assets/js/bootstrap.min.js"></script><script src="/assets/js/owl.carousel.min.js"></script><script src="/assets/js/slick.min.js"></script><script src="/assets/js/jquery.fancybox.min.js"></script><script src="/assets/js/custom.js?v=20261024-5"></script></body></html>
